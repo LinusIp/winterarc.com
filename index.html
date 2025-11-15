@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- PWA + App Icon Integration -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#60a5fa">
+  <!-- Android Icon -->
+  <link rel="icon" type="image/png" sizes="192x192" href="snowflake.png">
+  <!-- iOS Icon -->
+  <link rel="apple-touch-icon" href="snowflake.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Winter Arc — Deep Arctic</title>
+  <style>
+    /* DEEP ARCTIC THEME — phone-framed app */
+    :root{
+      --phone-w:390px; --phone-h:844px; --phone-radius:36px;
+      --bg-top:#021028;   /* deep navy */
+      --bg-bottom:#00101a; /* near-black teal */
+      --card-rgba: rgba(15,30,55,0.48);
+      --frost: rgba(255,255,255,0.06);
+      --muted: #9fb7d9;
+      --accent:#60a5fa;   /* arctic neon blue */
+      --accent-2:#38bdf8; /* bright cyan */
+      --glass-border: rgba(96,165,250,0.12);
+    }
+
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,var(--bg-top),var(--bg-bottom));display:flex;align-items:center;justify-content:center;color:#e6f7ff}
+
+    /* phone frame */
+    .phone-frame{width:var(--phone-w);height:var(--phone-h);border-radius:var(--phone-radius);box-shadow:0 30px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);overflow:hidden;background:linear-gradient(180deg, rgba(6,25,38,0.72), rgba(3,12,20,0.9));display:flex;flex-direction:column}
+    .bezel{height:28px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.0));display:flex;align-items:center;justify-content:center}
+    .app-root{flex:1;overflow:auto;-webkit-overflow-scrolling:touch}
+
+    /* header */
+    header.top-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:transparent}
+    header.top-header h1{font-size:16px;margin:0;color:#dff5ff;font-weight:700}
+    .icon-small{width:26px;height:26px;font-size:20px;line-height:20px}
+
+    main.container{padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));min-height:calc(var(--phone-h) - 120px)}
+
+    /* frosted cards */
+    .promo-card{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:14px;border:1px solid var(--glass-border);backdrop-filter:blur(10px);box-shadow:0 8px 30px rgba(3,12,22,0.6)}
+    .promo-img{width:72px;height:72px;border-radius:12px;object-fit:cover;box-shadow:0 6px 18px rgba(92,130,210,0.08);border:1px solid rgba(255,255,255,0.04)}
+    .promo-card h2{color:#e9f7ff;margin:0}
+    .promo-card p{color:var(--muted);margin:6px 0 0}
+
+    .section-title{margin:16px 8px 8px 12px;color:var(--muted);font-size:13px}
+    .store-list{display:flex;flex-direction:column;gap:10px;padding:0 12px}
+
+    .store-item{display:flex;align-items:center;gap:12px;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;text-decoration:none;color:inherit;border:1px solid rgba(255,255,255,0.02);}
+    .store-icon{width:44px;height:44px;border-radius:10px;display:inline-grid;place-items:center;font-size:22px}
+    .chevron{width:20px;height:20px;opacity:0.9;font-size:16px}
+    .store-item h4{margin:0;color:#eaf7ff;font-size:15px}
+    .store-item p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+    /* presets buttons as frosty pills */
+    .store-item.button-like{justify-content:center;min-height:44px;padding:10px 12px}
+
+    /* inputs */
+    input[type=text], input[type=number]{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);color:#eaf7ff;padding:10px 12px;border-radius:10px}
+    button.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#012022;border:0;padding:12px 14px;border-radius:10px;font-weight:700}
+    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:10px;border-radius:10px}
+
+    /* bottom nav — glass dock */
+    .bottom-nav{position:sticky;bottom:0;background:linear-gradient(180deg, rgba(6,17,26,0.6), rgba(4,12,18,0.9));display:flex;justify-content:space-around;padding:10px 6px;border-top:1px solid rgba(255,255,255,0.02);backdrop-filter:blur(8px)}
+    .nav-item{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--muted);font-size:11px}
+    .nav-item span{font-size:11px}
+    .nav-item.active{color:var(--accent);font-weight:700}
+
+    /* search overlay — dark icy modal */
+    .search-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(180deg, rgba(0,6,16,0.8), rgba(0,10,20,0.9));display:none;flex-direction:column;align-items:center;padding:80px 20px 20px;z-index:999}
+    .search-overlay.active{display:flex}
+    .search-input{width:100%;max-width:340px;padding:12px 14px;border-radius:999px;font-size:15px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#eaf7ff}
+    .close-search{background:none;border:0;color:var(--accent);font-size:16px;margin-top:12px;cursor:pointer}
+    .search-results{width:100%;max-width:340px;margin-top:20px}
+
+    /* per-task timer UI */
+    .task-timer{display:flex;gap:8px;align-items:center;margin-left:auto}
+    .timer-display{font-weight:800;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.02);font-size:13px;color:#dff5ff}
+    .timer-play{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#012022;border:0;padding:6px 8px;border-radius:8px;font-weight:700}
+
+    /* phone frame focus outline */
+    .phone-frame :focus{outline:3px solid rgba(96,165,250,0.12);outline-offset:2px}
+
+    @media (min-width:900px){ /* keep phone same size, centered */ }
+  </style>
+</head>
+<body>
+  <div class="phone-frame" role="application" aria-label="Winter Arc phone app">
+    <div class="bezel"></div>
+    <div class="app-root">
+
+      <header class="top-header">
+        <h1>Winter Arc</h1>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div id="topTimer" style="background:linear-gradient(90deg, rgba(96,165,250,0.12), rgba(56,189,248,0.06));padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px;color:#00131a">Rest: <span id="topTimerDisplay">00:30</span></div>
+            <span class="icon-small" id="search-btn">🔍</span>
+          </div>
+          <!-- Channel link below the icon -->
+          <a href="https://t.me/aicslife" id="channel-link" style="color:var(--accent);text-decoration:none;font-size:12px;font-weight:700" target="_blank">@aicslife</a>
+        </div>
+      </header>
+
+      <main class="container">
+        <section class="promo-section">
+          <div class="promo-card">
+            <div>
+              <h2>Quick Circuit — 3 Rounds</h2>
+              <p>Tap a routine to load it fast.</p>
+            </div>
+            <!-- snow_particle.gif should be a subtle looping particle GIF placed in the project -->
+            <img src="snowflake.png" class="promo-img" alt="Snow particles" />
+          </div>
+        </section>
+
+        <h3 class="section-title">Today’s Plan</h3>
+        <div id="store-list" class="store-list"></div>
+
+        <section class="nearby-discounts">
+          <h3 class="section-title">Presets & Controls</h3>
+          <div style="display:flex;gap:8px;padding:0 12px;margin-top:8px">
+            <button id="preset-beginner" class="store-item button-like">Beginner</button>
+            <button id="preset-strength" class="store-item button-like">Strength</button>
+            <button id="preset-endurance" class="store-item button-like">Endurance</button>
+          </div>
+        </section>
+
+        <div style="padding:12px;">
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="newtask" placeholder="Exercise (e.g. Push-ups)" style="flex:1;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.04)" />
+            <input id="sets" placeholder="Sets" type="number" min="1" style="width:72px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.04)" />
+            <input id="timer" placeholder="Timer (s)" type="number" min="1" style="width:86px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.04)" />
+            <button id="addBtn" class="primary" aria-label="Add exercise">+</button>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <button id="completeAll" class="ghost" style="flex:1">Complete All</button>
+            <button id="clearCompleted" class="ghost" style="flex:1">Reset Sets</button>
+          </div>
+        </div>
+
+      </main>
+
+      <nav class="bottom-nav" role="navigation" aria-label="Quick actions">
+        <a href="#" class="nav-item active"><span>🏠</span><span>Home</span></a>
+        <a href="#" class="nav-item"><span>📂</span><span>Workouts</span></a>
+        <a href="#" class="nav-item"><span>🤖</span><span>AI Coach</span></a>
+        <a href="#" class="nav-item"><span>📈</span><span>Progress</span></a>
+        <a href="#" class="nav-item"><span>👤</span><span>Profile</span></a>
+      </nav>
+
+    </div>
+
+    <div class="search-overlay" id="search-overlay">
+      <input type="text" id="search-input" class="search-input" placeholder="Search exercises or presets..." />
+      <button class="close-search" id="close-search">Close ✖</button>
+      <div class="search-results" id="search-results"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // logic: tasks now include optional timer (in seconds) per exercise
+    const defaults = [
+      {title:'Warm-up — dynamic (5 min)', sets:1, timer:300, completedSets:0},
+      {title:'Push-ups', sets:3, timer:60, completedSets:0},
+      {title:'Squats', sets:3, timer:60, completedSets:0},
+      {title:'Plank (sec)', sets:2, timer:45, completedSets:0},
+      {title:'Cool-down — stretch (5 min)', sets:1, timer:300, completedSets:0}
+    ];
+
+    let tasks = load();
+    const listEl = document.getElementById('store-list');
+
+    // keep per-task interval references so multiple timers behave
+    const taskIntervals = new Map();
+
+    function save(){localStorage.setItem('winter_arc_deeparctic', JSON.stringify(tasks))}
+    function load(){ try{ const raw=localStorage.getItem('winter_arc_deeparctic'); if(!raw) return defaults.map(t=>({...t,id:Date.now()+Math.random()})); const parsed = JSON.parse(raw); // ensure each task has id and timer
+      return parsed.map(t=>({...t, id: t.id||(Date.now()+Math.random()), sets: parseInt(t.sets)||1, timer: (typeof t.timer!=='undefined') ? parseInt(t.timer)||0 : (defaults.find(d=>d.title===t.title)?.timer||0), completedSets: parseInt(t.completedSets)||0 })); }catch(e){return defaults.map(t=>({...t,id:Date.now()+Math.random()}))} }
+
+    function formatTime(s){ if(!s && s!==0) return '--:--'; const mm = Math.floor(s/60); const ss = s%60; return `${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}` }
+
+    function render(){
+      listEl.innerHTML='';
+      tasks.forEach(t=>{
+        const a = document.createElement('a'); a.className='store-item'; a.href='#';
+        // delete button HTML
+        const deleteBtnHtml = `
+          <button class=\"delete-btn\" data-id=\"${t.id}\" title=\"Delete exercise\" style=\"background:rgba(255,50,50,0.12);border:1px solid rgba(255,50,50,0.18);color:#ffb4b4;padding:8px;border-radius:8px;margin-right:8px\">🗑️</button>
+        `;
+        // timer display and play button
+        const taskTimerHtml = `
+          <div class=\"task-timer\">
+            <div class=\"timer-display\" id=\"timer-display-${t.id}\">${t.timer? formatTime(t.timer) : '--:--'}</div>
+            <button class=\"timer-play\" data-id=\"${t.id}\">Start</button>
+          </div>
+        `;
+
+        a.innerHTML = `
+          <div style=\"display:flex;align-items:center;width:100%\">
+            ${deleteBtnHtml}
+            <div class=\"store-icon\">🏬</div>
+            <div style=\"flex:1\">
+              <h4>${escapeHtml(t.title)}</h4>
+              <p>${t.completedSets || 0}/${t.sets} sets</p>
+            </div>
+            ${taskTimerHtml}
+          </div>
+        `;
+
+        a.addEventListener('click', (e)=>{ e.preventDefault(); openQuickEdit(t.id); });
+        listEl.appendChild(a);
+      });
+
+      // attach timer handlers to start buttons
+      Array.from(document.querySelectorAll('.timer-play')).forEach(btn=>{
+        const id = btn.getAttribute('data-id');
+        btn.onclick = (e)=>{ e.stopPropagation(); startTaskTimer(id); };
+      });
+
+      // attach delete handlers
+      Array.from(document.querySelectorAll('.delete-btn')).forEach(btn=>{
+        const id = btn.getAttribute('data-id');
+        btn.onclick = (e)=>{ e.stopPropagation(); if(confirm('Delete this exercise?')) removeTask(id); };
+      });
+
+      save();
+    }
+
+    function startTaskTimer(id){
+      const t = tasks.find(x=>String(x.id)===String(id)); if(!t) return;
+      const display = document.getElementById('timer-display-'+t.id);
+      if(!t.timer || t.timer<=0){ alert('No timer set for this exercise.'); return; }
+      // clear existing
+      if(taskIntervals.has(t.id)){ clearInterval(taskIntervals.get(t.id)); taskIntervals.delete(t.id); }
+      let timeLeft = t.timer;
+      display.textContent = formatTime(timeLeft);
+      const interval = setInterval(()=>{
+        timeLeft--;
+        if(display) display.textContent = formatTime(timeLeft);
+        if(timeLeft<=0){ clearInterval(interval); taskIntervals.delete(t.id); playBeep(); alert('Timer finished for "'+t.title+'"'); if(display) display.textContent = formatTime(t.timer); }
+      }, 1000);
+      taskIntervals.set(t.id, interval);
+    }
+
+    function playBeep(){ try{ const ctx = new (window.AudioContext||window.webkitAudioContext)(); const o = ctx.createOscillator(); const g = ctx.createGain(); o.type='sine'; o.frequency.value=880; g.gain.value=0.05; o.connect(g); g.connect(ctx.destination); o.start(); setTimeout(()=>{ o.stop(); ctx.close(); },250); }catch(e){console.log('beep failed',e)} }
+
+    function openQuickEdit(id){
+      const t = tasks.find(x=>x.id===id);
+      if(!t) return;
+      // allow changing completed sets and timer
+      const setsVal = prompt(`Completed sets for "${t.title}" (0-${t.sets}):`, t.completedSets||0);
+      const setsNum = parseInt(setsVal);
+      if(!isNaN(setsNum)) t.completedSets = Math.max(0, Math.min(t.sets, setsNum));
+      const timerVal = prompt('Set timer in seconds for this exercise (leave blank to keep):', t.timer || '');
+      const timerNum = parseInt(timerVal);
+      if(!isNaN(timerNum) && timerNum>0) t.timer = timerNum;
+      render();
+    }
+
+    function removeTask(id){ tasks = tasks.filter(t=> String(t.id)!==String(id)); // clear any running timer
+      if(taskIntervals.has(id)){ clearInterval(taskIntervals.get(id)); taskIntervals.delete(id); }
+      render(); }
+
+    function addTask(title, sets, timerVal){ if(!title || !title.trim()) return; tasks.unshift({id:Date.now()+Math.random(), title:title.trim(), sets:parseInt(sets)||1, timer: timerVal? parseInt(timerVal) : 0, completedSets:0}); render(); }
+    document.getElementById('addBtn').addEventListener('click', ()=>{ const title = document.getElementById('newtask').value; const sets = document.getElementById('sets').value; const timerVal = document.getElementById('timer').value; addTask(title, sets, timerVal); document.getElementById('newtask').value=''; document.getElementById('sets').value=''; document.getElementById('timer').value=''; });
+    document.getElementById('completeAll').addEventListener('click', ()=>{ tasks = tasks.map(t=>({...t,completedSets:t.sets})); render(); });
+    document.getElementById('clearCompleted').addEventListener('click', ()=>{ tasks = tasks.map(t=>({...t,completedSets:0})); render(); });
+
+    document.getElementById('preset-beginner').addEventListener('click', ()=>{ tasks = [ {title:'Warm-up', sets:1, timer:300, completedSets:0}, {title:'Push-ups', sets:3, timer:60, completedSets:0}, {title:'Squats', sets:3, timer:60, completedSets:0} ].map(t=>({...t,id:Date.now()+Math.random()})); render(); });
+    document.getElementById('preset-strength').addEventListener('click', ()=>{ tasks = [ {title:'Warm-up mobility', sets:1, timer:180, completedSets:0}, {title:'Weighted Push', sets:4, timer:90, completedSets:0}, {title:'Deadlift', sets:4, timer:120, completedSets:0} ].map(t=>({...t,id:Date.now()+Math.random()})); render(); });
+    document.getElementById('preset-endurance').addEventListener('click', ()=>{ tasks = [ {title:'Warm-up', sets:1, timer:300, completedSets:0}, {title:'Run / Bike', sets:1, timer:1200, completedSets:0}, {title:'Circuit (3 rounds)', sets:3, timer:60, completedSets:0} ].map(t=>({...t,id:Date.now()+Math.random()})); render(); });
+
+    // timer
+    let timer=null; let timeLeft=30; const topTimerDisplay=document.getElementById('topTimerDisplay');
+    function updateTimer(){ const mm=String(Math.floor(timeLeft/60)).padStart(2,'0'); const ss=String(timeLeft%60).padStart(2,'0'); topTimerDisplay.textContent = `${mm}:${ss}` }
+    document.getElementById('topTimer').addEventListener('click', ()=>{ const s = prompt('Enter seconds for rest timer', '30'); const n=parseInt(s); if(!isNaN(n)&&n>0){ timeLeft=n; updateTimer(); if(timer) clearInterval(timer); timer = setInterval(()=>{ timeLeft--; updateTimer(); if(timeLeft<=0){ clearInterval(timer); timer=null; alert('Rest finished'); } },1000); } });
+    updateTimer();
+
+    // search overlay
+    const exercises = [ 'Push-ups','Squats','Plank','Burpees','Lunges','Pull-ups' ];
+    const searchBtn = document.getElementById('search-btn');
+    const searchOverlay = document.getElementById('search-overlay');
+    const closeSearch = document.getElementById('close-search');
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+
+    searchBtn.onclick = ()=>{ searchOverlay.classList.add('active'); setTimeout(()=>searchInput.focus(),120); };
+    closeSearch.onclick = ()=>{ searchOverlay.classList.remove('active'); searchInput.value=''; searchResults.innerHTML=''; };
+
+    searchInput.addEventListener('input', ()=>{
+      const q = searchInput.value.toLowerCase();
+      const filtered = exercises.filter(s=>s.toLowerCase().includes(q));
+      if(filtered.length===0){ searchResults.innerHTML = `<p style=\"text-align:center;color:#9fb7d9\">No results</p>`; }
+      else{
+        searchResults.innerHTML = filtered.map(s=>`<a href=\"#\" class=\"store-item\" style=\"margin-bottom:8px\"> <div class=\"store-icon\">🏬</div> <div style=\"flex:1\"><h4 style=\"margin:0\">${escapeHtml(s)}</h4><p style=\"margin:6px 0 0;color:var(--muted)\">Add to plan</p></div><div class=\"chevron\">➤</div></a>`).join('');
+        Array.from(searchResults.querySelectorAll('.store-item')).forEach((el,i)=>{
+          el.addEventListener('click',(e)=>{ e.preventDefault(); const timerPrompt = prompt('Set timer in seconds for this exercise (optional)', '30'); const timerNum = parseInt(timerPrompt); addTask(filtered[i],1, isNaN(timerNum)? 0 : timerNum); searchOverlay.classList.remove('active'); searchInput.value=''; searchResults.innerHTML=''; });
+        });
+      }
+    });
+
+    function escapeHtml(str){ return String(str).replace(/[&<>\"']/g, function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":"&#39;"}[m]}); }
+
+    render();
+  </script>
+</body>
+</html>
