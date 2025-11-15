@@ -171,7 +171,8 @@
     const taskIntervals = new Map();
 
     function save(){localStorage.setItem('winter_arc_deeparctic', JSON.stringify(tasks))}
-    function load(){ try{ const raw=localStorage.getItem('winter_arc_deeparctic'); if(!raw) return defaults.map(t=>({...t,id:Date.now()+Math.random()})); return JSON.parse(raw)}catch(e){return defaults.map(t=>({...t,id:Date.now()+Math.random()}))} }
+    function load(){ try{ const raw=localStorage.getItem('winter_arc_deeparctic'); if(!raw) return defaults.map(t=>({...t,id:Date.now()+Math.random()})); const parsed = JSON.parse(raw); // ensure each task has id and timer
+      return parsed.map(t=>({...t, id: t.id||(Date.now()+Math.random()), sets: parseInt(t.sets)||1, timer: (typeof t.timer!=='undefined') ? parseInt(t.timer)||0 : (defaults.find(d=>d.title===t.title)?.timer||0), completedSets: parseInt(t.completedSets)||0 })); }catch(e){return defaults.map(t=>({...t,id:Date.now()+Math.random()}))} }
 
     function formatTime(s){ if(!s && s!==0) return '--:--'; const mm = Math.floor(s/60); const ss = s%60; return `${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}` }
 
@@ -179,22 +180,12 @@
       listEl.innerHTML='';
       tasks.forEach(t=>{
         const a = document.createElement('a'); a.className='store-item'; a.href='#';
+        // delete button HTML
+        const deleteBtnHtml = `\n          <button class=\"delete-btn\" data-id=\"${t.id}\" title=\"Delete exercise\" style=\"background:rgba(255,50,50,0.12);border:1px solid rgba(255,50,50,0.18);color:#ffb4b4;padding:8px;border-radius:8px;margin-right:8px\">🗑️</button>\n        `;
         // timer display and play button
-        const taskTimerHtml = `
-          <button class=\"delete-btn\" style=\"background:rgba(255,50,50,0.15);border:1px solid rgba(255,50,50,0.25);color:#ff6b6b;padding:6px 8px;border-radius:8px;font-weight:700;margin-right:8px\" data-del-id=\"$1\">🗑️</button><div class=\"task-timer\">
-            <div class=\"timer-display\" id=\"timer-display-${t.id}\">${t.timer? formatTime(t.timer) : '--:--'}</div>
-            <button class=\"timer-play\" data-id=\"${t.id}\">Start</button>
-          </div>
-        `;
+        const taskTimerHtml = `\n          <div class=\"task-timer\">\n            <div class=\"timer-display\" id=\"timer-display-${t.id}\">${t.timer? formatTime(t.timer) : '--:--'}</div>\n            <button class=\"timer-play\" data-id=\"${t.id}\">Start</button>\n          </div>\n        `;
 
-        a.innerHTML = `
-          <div class=\"store-icon\">🏬</div>
-          <div style=\"flex:1\">
-            <h4>${escapeHtml(t.title)}</h4>
-            <p>${t.completedSets || 0}/${t.sets} sets</p>
-          </div>
-          ${taskTimerHtml}
-        `;
+        a.innerHTML = `\n          <div style=\"display:flex;align-items:center;width:100%\">\n            ${deleteBtnHtml}\n            <div class=\"store-icon\">🏬</div>\n            <div style=\"flex:1\">\n              <h4>${escapeHtml(t.title)}</h4>\n              <p>${t.completedSets || 0}/${t.sets} sets</p>\n            </div>\n            ${taskTimerHtml}\n          </div>\n        `;
 
         a.addEventListener('click', (e)=>{ e.preventDefault(); openQuickEdit(t.id); });
         listEl.appendChild(a);
@@ -204,6 +195,12 @@
       Array.from(document.querySelectorAll('.timer-play')).forEach(btn=>{
         const id = btn.getAttribute('data-id');
         btn.onclick = (e)=>{ e.stopPropagation(); startTaskTimer(id); };
+      });
+
+      // attach delete handlers
+      Array.from(document.querySelectorAll('.delete-btn')).forEach(btn=>{
+        const id = btn.getAttribute('data-id');
+        btn.onclick = (e)=>{ e.stopPropagation(); if(confirm('Delete this exercise?')) removeTask(id); };
       });
 
       save();
@@ -240,6 +237,10 @@
       render();
     }
 
+    function removeTask(id){ tasks = tasks.filter(t=> String(t.id)!==String(id)); // clear any running timer
+      if(taskIntervals.has(id)){ clearInterval(taskIntervals.get(id)); taskIntervals.delete(id); }
+      render(); }
+
     function addTask(title, sets, timerVal){ if(!title || !title.trim()) return; tasks.unshift({id:Date.now()+Math.random(), title:title.trim(), sets:parseInt(sets)||1, timer: timerVal? parseInt(timerVal) : 0, completedSets:0}); render(); }
     document.getElementById('addBtn').addEventListener('click', ()=>{ const title = document.getElementById('newtask').value; const sets = document.getElementById('sets').value; const timerVal = document.getElementById('timer').value; addTask(title, sets, timerVal); document.getElementById('newtask').value=''; document.getElementById('sets').value=''; document.getElementById('timer').value=''; });
     document.getElementById('completeAll').addEventListener('click', ()=>{ tasks = tasks.map(t=>({...t,completedSets:t.sets})); render(); });
@@ -265,7 +266,7 @@
 
     searchBtn.onclick = ()=>{ searchOverlay.classList.add('active'); setTimeout(()=>searchInput.focus(),120); };
     closeSearch.onclick = ()=>{ searchOverlay.classList.remove('active'); searchInput.value=''; searchResults.innerHTML=''; };
-
+        
     searchInput.addEventListener('input', ()=>{
       const q = searchInput.value.toLowerCase();
       const filtered = exercises.filter(s=>s.toLowerCase().includes(q));
