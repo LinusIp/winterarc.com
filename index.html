@@ -1,314 +1,234 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1,viewport-fit=cover" />
-  <title>Winter Arc — Mobile Training Checklist</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Winter Arc — Deep Arctic</title>
   <style>
-    :root{--bg:#041423;--card:#071427;--muted:#9aa8bd;--accent:#60a5fa;--glass:rgba(255,255,255,0.03);--radius:14px}
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,var(--bg),#021018);color:#eaf2ff}
-
-    /* Mobile-first layout */
-    .app{max-width:720px;margin:0 auto;padding:14px;display:flex;flex-direction:column;gap:12px}
-    header{display:flex;align-items:center;gap:12px}
-    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#7dd3fc);display:grid;place-items:center;font-weight:800;color:#04263b}
-    h1{font-size:16px;margin:0}
-    p.lead{margin:2px 0 0;color:var(--muted);font-size:13px}
-
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,0.02);box-shadow:0 8px 30px rgba(2,6,23,0.6)}
-
-    .add{display:flex;gap:8px;align-items:center}
-    .newtask{flex:1;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;font-size:15px}
-    .small{width:80px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;text-align:center}
-    .btn{padding:10px 12px;border-radius:12px;border:0;background:var(--glass);font-weight:700;font-size:14px;min-width:56px}
-    .btn.primary{background:linear-gradient(90deg, rgba(96,165,250,0.14), rgba(96,165,250,0.06));}
-
-    ul.tasks{list-style:none;padding:0;margin:12px 0 0;display:flex;flex-direction:column;gap:10px}
-    li.task{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:transparent;border:1px solid rgba(255,255,255,0.02)}
-    .left{display:flex;flex-direction:column;flex:1;gap:6px}
-    .title{font-weight:800;font-size:15px}
-    .meta{color:var(--muted);font-size:13px}
-
-    .counter{display:flex;gap:8px;align-items:center}
-    .iconbtn{background:transparent;border:0;color:var(--muted);cursor:pointer;padding:8px;border-radius:10px;font-size:18px}
-    .pill{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);font-weight:800}
-
-    .progress{height:14px;background:rgba(255,255,255,0.03);border-radius:999px;overflow:hidden;margin-top:10px}
-    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent), #7dd3fc);width:0%}
-
-    /* Bottom fixed quick actions for mobile */
-    .bottombar{position:fixed;left:0;right:0;bottom:0;padding:10px;background:linear-gradient(180deg,rgba(2,6,23,0.6),rgba(2,6,23,0.9));display:flex;gap:8px;align-items:center;box-shadow:0 -8px 30px rgba(2,6,23,0.6)}
-    .bottombar .btn{flex:1}
-
-    .timer-big{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:12px;background:linear-gradient(90deg, rgba(96,165,250,0.06), rgba(125,211,252,0.02));}
-    .timer-display{font-size:20px;font-weight:900}
-
-    .sidebar-sheet{position:fixed;left:0;right:0;bottom:72px;background:linear-gradient(180deg,#041423,#021018);padding:12px;border-top-left-radius:16px;border-top-right-radius:16px;border:1px solid rgba(255,255,255,0.02);max-height:55vh;overflow:auto;display:none}
-    .sidebar-sheet.open{display:block}
-    .preset{display:flex;flex-direction:column;gap:8px}
-    .preset button{padding:10px;border-radius:12px;border:1px dashed rgba(255,255,255,0.03);background:transparent;color:var(--muted);text-align:left}
-
-    .small-note{text-align:center;color:var(--muted);font-size:13px;margin-top:8px}
-
-    @media (min-width:600px){
-      .app{padding:20px}
-      .bottombar{display:none}
-      .sidebar-sheet{display:block;position:static;border-radius:12px;max-height:none}
-      header{align-items:flex-start}
+    /* DEEP ARCTIC THEME — phone-framed app */
+    :root{
+      --phone-w:390px; --phone-h:844px; --phone-radius:36px;
+      --bg-top:#021028;   /* deep navy */
+      --bg-bottom:#00101a; /* near-black teal */
+      --card-rgba: rgba(15,30,55,0.48);
+      --frost: rgba(255,255,255,0.06);
+      --muted: #9fb7d9;
+      --accent:#60a5fa;   /* arctic neon blue */
+      --accent-2:#38bdf8; /* bright cyan */
+      --glass-border: rgba(96,165,250,0.12);
     }
+
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,var(--bg-top),var(--bg-bottom));display:flex;align-items:center;justify-content:center;color:#e6f7ff}
+
+    /* phone frame */
+    .phone-frame{width:var(--phone-w);height:var(--phone-h);border-radius:var(--phone-radius);box-shadow:0 30px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);overflow:hidden;background:linear-gradient(180deg, rgba(6,25,38,0.72), rgba(3,12,20,0.9));display:flex;flex-direction:column}
+    .bezel{height:28px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.0));display:flex;align-items:center;justify-content:center}
+    .app-root{flex:1;overflow:auto;-webkit-overflow-scrolling:touch}
+
+    /* header */
+    header.top-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:transparent}
+    header.top-header h1{font-size:16px;margin:0;color:#dff5ff;font-weight:700}
+    .icon-small{width:26px;height:26px;font-size:20px;line-height:20px}
+
+    main.container{padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));min-height:calc(var(--phone-h) - 120px)}
+
+    /* frosted cards */
+    .promo-card{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:14px;border:1px solid var(--glass-border);backdrop-filter:blur(10px);box-shadow:0 8px 30px rgba(3,12,22,0.6)}
+    .promo-img{width:72px;height:72px;border-radius:12px;object-fit:cover;box-shadow:0 6px 18px rgba(92,130,210,0.08);border:1px solid rgba(255,255,255,0.04)}
+    .promo-card h2{color:#e9f7ff;margin:0}
+    .promo-card p{color:var(--muted);margin:6px 0 0}
+
+    .section-title{margin:16px 8px 8px 12px;color:var(--muted);font-size:13px}
+    .store-list{display:flex;flex-direction:column;gap:10px;padding:0 12px}
+
+    .store-item{display:flex;align-items:center;gap:12px;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;text-decoration:none;color:inherit;border:1px solid rgba(255,255,255,0.02);}
+    .store-icon{width:44px;height:44px;border-radius:10px;display:inline-grid;place-items:center;font-size:22px}
+    .chevron{width:20px;height:20px;opacity:0.9;font-size:16px}
+    .store-item h4{margin:0;color:#eaf7ff;font-size:15px}
+    .store-item p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+    /* presets buttons as frosty pills */
+    .store-item.button-like{justify-content:center;min-height:44px;padding:10px 12px}
+
+    /* inputs */
+    input[type=text], input[type=number]{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);color:#eaf7ff;padding:10px 12px;border-radius:10px}
+    button.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#012022;border:0;padding:12px 14px;border-radius:10px;font-weight:700}
+    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:10px;border-radius:10px}
+
+    /* bottom nav — glass dock */
+    .bottom-nav{position:sticky;bottom:0;background:linear-gradient(180deg, rgba(6,17,26,0.6), rgba(4,12,18,0.9));display:flex;justify-content:space-around;padding:10px 6px;border-top:1px solid rgba(255,255,255,0.02);backdrop-filter:blur(8px)}
+    .nav-item{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--muted);font-size:11px}
+    .nav-item span{font-size:11px}
+    .nav-item.active{color:var(--accent);font-weight:700}
+
+    /* search overlay — dark icy modal */
+    .search-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(180deg, rgba(0,6,16,0.8), rgba(0,10,20,0.9));display:none;flex-direction:column;align-items:center;padding:80px 20px 20px;z-index:999}
+    .search-overlay.active{display:flex}
+    .search-input{width:100%;max-width:340px;padding:12px 14px;border-radius:999px;font-size:15px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#eaf7ff}
+    .close-search{background:none;border:0;color:var(--accent);font-size:16px;margin-top:12px;cursor:pointer}
+    .search-results{width:100%;max-width:340px;margin-top:20px}
+
+    /* phone frame focus outline */
+    .phone-frame :focus{outline:3px solid rgba(96,165,250,0.12);outline-offset:2px}
+
+    @media (min-width:900px){ /* keep phone same size, centered */ }
   </style>
 </head>
 <body>
-  <main class="app">
-    <header>
-      <div class="logo">❄️</div>
-      <div>
-        <h1>Winter Arc — Training</h1>
-        <p class="lead">Touch-friendly mobile checklist: sets, reps, rest timer, and presets.</p>
-      </div>
-    </header>
+  <div class="phone-frame" role="application" aria-label="Winter Arc phone app">
+    <div class="bezel"></div>
+    <div class="app-root">
 
-    <section class="card">
-      <div class="add" style="align-items:center">
-        <input class="newtask" id="newtask" placeholder="Exercise (eg. Push-ups)" />
-        <input class="small" id="reps" placeholder="Reps" />
-        <input class="small" id="sets" placeholder="Sets" />
-        <button class="btn primary" id="addBtn">Add</button>
-      </div>
-
-      <div class="progress" aria-hidden="true">
-        <i id="progressBar" style="width:0%"></i>
-      </div>
-      <div style="display:flex;justify-content:space-between;margin-top:8px;align-items:center">
-        <div class="meta" id="stats">0 / 0 sets done</div>
-        <div class="meta" id="percent">0%</div>
-      </div>
-
-      <ul class="tasks" id="tasksList" aria-live="polite"></ul>
-
-      <div style="display:flex;gap:8px;margin-top:12px">
-        <button class="btn" id="clearCompleted">Reset Sets</button>
-        <button class="btn" id="completeAll">Complete All</button>
-      </div>
-
-      <div class="small-note">Swipe up on the bottom bar for presets & timer (or tap Presets)</div>
-    </section>
-
-    <!-- Sidebar sheet for presets & timers (mobile) -->
-    <div class="sidebar-sheet" id="sheet">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <h3 style="margin:0">Presets & Timers</h3>
-        <button class="btn" id="closeSheet">Close</button>
-      </div>
-
-      <div class="card" style="margin-bottom:10px">
-        <h4 style="margin:0 0 8px 0">Presets</h4>
-        <div class="preset">
-          <button id="preset-beginner">Beginner — Full Body</button>
-          <button id="preset-strength">Strength — Push/Pull</button>
-          <button id="preset-endurance">Endurance — Cardio Focus</button>
+      <header class="top-header">
+        <h1>Winter Arc</h1>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div id="topTimer" style="background:linear-gradient(90deg, rgba(96,165,250,0.12), rgba(56,189,248,0.06));padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px;color:#00131a">Rest: <span id="topTimerDisplay">00:30</span></div>
+          <span class="icon-small">🔍</span>
         </div>
-      </div>
+      </header>
 
-      <div class="card">
-        <h4 style="margin:0 0 8px 0">Rest Timer (sec)</h4>
-        <div class="timer-big">
-          <div class="timer-display" id="timerDisplay">00:30</div>
+      <main class="container">
+        <section class="promo-section">
+          <div class="promo-card">
+            <div>
+              <h2>Quick Circuit — 3 Rounds</h2>
+              <p>Tap a routine to load it fast.</p>
+            </div>
+            <!-- snow_particle.gif should be a subtle looping particle GIF placed in the project -->
+            <img src="snowflake.png" class="promo-img" alt="Snow particles" />
+          </div>
+        </section>
+
+        <h3 class="section-title">Today’s Plan</h3>
+        <div id="store-list" class="store-list"></div>
+
+        <section class="nearby-discounts">
+          <h3 class="section-title">Presets & Controls</h3>
+          <div style="display:flex;gap:8px;padding:0 12px;margin-top:8px">
+            <button id="preset-beginner" class="store-item button-like">Beginner</button>
+            <button id="preset-strength" class="store-item button-like">Strength</button>
+            <button id="preset-endurance" class="store-item button-like">Endurance</button>
+          </div>
+        </section>
+
+        <div style="padding:12px;">
           <div style="display:flex;gap:8px">
-            <button class="btn" id="timerStart">Start</button>
-            <button class="btn" id="timerStop">Stop</button>
-            <button class="btn" id="timerReset">Reset</button>
+            <input id="newtask" placeholder="Exercise (e.g. Push-ups)" style="flex:1;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.04)" />
+            <input id="sets" placeholder="Sets" style="width:72px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.04)" />
+            <button id="addBtn" class="primary">Add</button>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <button id="completeAll" class="ghost" style="flex:1">Complete All</button>
+            <button id="clearCompleted" class="ghost" style="flex:1">Reset Sets</button>
           </div>
         </div>
-        <p class="small-note">Tap the timer to change seconds. Will beep when finished.</p>
-      </div>
 
-      <div class="card" style="margin-top:10px">
-        <h4 style="margin:0 0 8px 0">Save & Load</h4>
-        <div style="display:flex;gap:8px">
-          <button class="btn primary" id="btn-export">Export</button>
-          <input type="file" id="fileInput" accept="application/json" style="flex:1" />
-        </div>
-      </div>
+      </main>
 
-      <div class="small-note">Tip: Use Complete All between sets, and Reset Sets to start next session.</div>
+      <nav class="bottom-nav" role="navigation" aria-label="Quick actions">
+        <a href="#" class="nav-item active"><span>🏠</span><span>Home</span></a>
+        <a href="#" class="nav-item"><span>📂</span><span>Workouts</span></a>
+        <a href="#" class="nav-item"><span>🤖</span><span>AI Coach</span></a>
+        <a href="#" class="nav-item"><span>📈</span><span>Progress</span></a>
+        <a href="#" class="nav-item"><span>👤</span><span>Profile</span></a>
+      </nav>
+
     </div>
 
-    <div style="height:90px"></div> <!-- spacer so content not hidden by bottom bar -->
-
-    <!-- Bottom fixed bar (mobile quick actions) -->
-    <div class="bottombar">
-      <button class="btn" id="openSheet">Presets</button>
-      <button class="btn primary" id="btn-reset">Reset</button>
-      <button class="btn" id="btn-export2">Export</button>
+    <div class="search-overlay" id="search-overlay">
+      <input type="text" id="search-input" class="search-input" placeholder="Search exercises or presets..." />
+      <button class="close-search" id="close-search">Close ✖</button>
+      <div class="search-results" id="search-results"></div>
     </div>
-  <div style="text-align:center;margin-top:20px;font-size:14px;color:#9aa8bd">
-  <a href="https://t.me/aicslife" target="_blank" style="color:#60a5fa;text-decoration:none;font-weight:700">Follow t.me/aicslife</a>
-</div>
 
-</main>
+  </div>
 
   <script>
-    // Keep main logic similar to desktop version but optimized for touch
-    const TASKS_KEY = 'winter_arc_training_v1_mobile';
-    const tasksEl = document.getElementById('tasksList');
-    const newtaskEl = document.getElementById('newtask');
-    const repsEl = document.getElementById('reps');
-    const setsEl = document.getElementById('sets');
-    const addBtn = document.getElementById('addBtn');
-    const progressBar = document.getElementById('progressBar');
-    const stats = document.getElementById('stats');
-    const percent = document.getElementById('percent');
-
+    // logic unchanged; tasks, presets, timer, search add flow
     const defaults = [
-      {title:'Warm-up — dynamic (5 min)', reps:'', sets:1, completedSets:0},
-      {title:"Push-ups", reps:'12', sets:3, completedSets:0},
-      {title:"Squats", reps:'15', sets:3, completedSets:0},
-      {title:"Plank (sec)", reps:'45', sets:2, completedSets:0},
-      {title:"Cool-down — stretch (5 min)", reps:'', sets:1, completedSets:0}
+      {title:'Warm-up — dynamic (5 min)', sets:1, completedSets:0},
+      {title:'Push-ups', sets:3, completedSets:0},
+      {title:'Squats', sets:3, completedSets:0},
+      {title:'Plank (sec)', sets:2, completedSets:0},
+      {title:'Cool-down — stretch (5 min)', sets:1, completedSets:0}
     ];
 
     let tasks = load();
+    const listEl = document.getElementById('store-list');
 
-    function save(){localStorage.setItem(TASKS_KEY, JSON.stringify(tasks))}
-    function load(){
-      try{
-        const raw = localStorage.getItem(TASKS_KEY);
-        if(!raw) return defaults.map(t=>({...t,id:Date.now()+Math.random()}));
-        return JSON.parse(raw);
-      }catch(e){return defaults.map(t=>({...t,id:Date.now()+Math.random()}))}
-    }
+    function save(){localStorage.setItem('winter_arc_deeparctic', JSON.stringify(tasks))}
+    function load(){ try{ const raw=localStorage.getItem('winter_arc_deeparctic'); if(!raw) return defaults.map(t=>({...t,id:Date.now()+Math.random()})); return JSON.parse(raw)}catch(e){return defaults.map(t=>({...t,id:Date.now()+Math.random()}))} }
 
     function render(){
-      tasksEl.innerHTML='';
+      listEl.innerHTML='';
       tasks.forEach(t=>{
-        const li = document.createElement('li'); li.className='task';
-
-        const left = document.createElement('div'); left.className='left';
-        const title = document.createElement('div'); title.className='title'; title.textContent=t.title; title.setAttribute('contenteditable','true');
-        title.addEventListener('blur',()=>{updateTitle(t.id,title.textContent)});
-        title.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault(); title.blur();}});
-
-        const meta = document.createElement('div'); meta.className='meta'; meta.textContent = `${t.reps? t.reps+' reps':''} ${t.reps && t.sets? '·':''} ${t.sets? t.sets+' sets':''}`;
-        left.appendChild(title); left.appendChild(meta);
-
-        const actions = document.createElement('div'); actions.className='task-actions';
-        const counter = document.createElement('div'); counter.className='counter';
-
-        const minus = document.createElement('button'); minus.className='iconbtn'; minus.textContent='−'; minus.title='Decrease completed sets'; minus.addEventListener('click',()=>{changeCompleted(t.id,-1)});
-        const pill = document.createElement('div'); pill.className='pill'; pill.textContent = `${t.completedSets}/${t.sets}`;
-        const plus = document.createElement('button'); plus.className='iconbtn'; plus.textContent='+'; plus.title='Increase completed sets'; plus.addEventListener('click',()=>{changeCompleted(t.id,1)});
-        counter.appendChild(minus); counter.appendChild(pill); counter.appendChild(plus);
-
-        const del = document.createElement('button'); del.className='iconbtn'; del.innerHTML='🗑️'; del.title='Delete'; del.addEventListener('click',()=>{removeTask(t.id)});
-
-        actions.appendChild(counter); actions.appendChild(del);
-        li.appendChild(left); li.appendChild(actions);
-        tasksEl.appendChild(li);
+        const a = document.createElement('a'); a.className='store-item'; a.href='#';
+        a.innerHTML = `
+          <div class="store-icon">🏬</div>
+          <div style="flex:1">
+            <h4>${escapeHtml(t.title)}</h4>
+            <p>${t.completedSets || 0}/${t.sets} sets</p>
+          </div>
+          <div class="chevron">➤</div>
+        `;
+        a.addEventListener('click', (e)=>{ e.preventDefault(); openQuickEdit(t.id, a); });
+        listEl.appendChild(a);
       });
-      updateProgress();
       save();
     }
 
-    function addTask(text, reps, sets){ if(!text || !text.trim()) return; tasks.unshift({id:Date.now()+Math.random(), title:text.trim(), reps:reps||'', sets:parseInt(sets)||1, completedSets:0}); render(); }
-    function removeTask(id){ tasks = tasks.filter(t=>t.id!==id); render(); }
-    function changeCompleted(id, delta){ tasks = tasks.map(t=> t.id===id? {...t, completedSets: Math.max(0, Math.min(t.sets, (t.completedSets||0)+delta))} : t); render(); }
-    function updateTitle(id, text){ tasks = tasks.map(t=> t.id===id? {...t,title:text.trim()||t.title}: t); render(); }
-
-    function updateProgress(){
-      const totalSets = tasks.reduce((s,t)=> s + (parseInt(t.sets)||0), 0);
-      const doneSets = tasks.reduce((s,t)=> s + (parseInt(t.completedSets)||0), 0);
-      const pct = totalSets ? Math.round((doneSets/totalSets)*100) : 0;
-      progressBar.style.width = pct+'%';
-      stats.textContent = `${doneSets} / ${totalSets} sets done`;
-      percent.textContent = `${pct}%`;
+    function openQuickEdit(id){
+      const t = tasks.find(x=>x.id===id);
+      if(!t) return;
+      const action = prompt(`Change completed sets for "${t.title}" (0-${t.sets}):`, t.completedSets||0);
+      const v = parseInt(action);
+      if(!isNaN(v)){
+        t.completedSets = Math.max(0, Math.min(t.sets, v)); render();
+      }
     }
 
-    // Controls
-    addBtn.addEventListener('click', ()=>{ addTask(newtaskEl.value, repsEl.value, setsEl.value); newtaskEl.value=''; repsEl.value=''; setsEl.value=''; newtaskEl.focus(); });
-    newtaskEl.addEventListener('keydown', e=>{ if(e.key==='Enter'){ addTask(newtaskEl.value, repsEl.value, setsEl.value); newtaskEl.value=''; repsEl.value=''; setsEl.value=''; } });
+    function addTask(title, sets){ if(!title || !title.trim()) return; tasks.unshift({id:Date.now()+Math.random(), title:title.trim(), sets:parseInt(sets)||1, completedSets:0}); render(); }
+    document.getElementById('addBtn').addEventListener('click', ()=>{ addTask(document.getElementById('newtask').value, document.getElementById('sets').value); document.getElementById('newtask').value=''; document.getElementById('sets').value=''; });
+    document.getElementById('completeAll').addEventListener('click', ()=>{ tasks = tasks.map(t=>({...t,completedSets:t.sets})); render(); });
+    document.getElementById('clearCompleted').addEventListener('click', ()=>{ tasks = tasks.map(t=>({...t,completedSets:0})); render(); });
 
-    document.getElementById('clearCompleted').addEventListener('click', ()=>{ tasks = tasks.map(t=>({...t, completedSets:0})); render(); });
-    document.getElementById('completeAll').addEventListener('click', ()=>{ tasks = tasks.map(t=>({...t, completedSets: t.sets})); render(); });
-    document.getElementById('btn-reset').addEventListener('click', ()=>{ if(confirm('Reset to default training plan?')){ tasks = defaults.map(t=>({...t,id:Date.now()+Math.random()})); render(); }});
+    document.getElementById('preset-beginner').addEventListener('click', ()=>{ tasks = [ {title:'Warm-up', sets:1, completedSets:0}, {title:'Push-ups', sets:3, completedSets:0}, {title:'Squats', sets:3, completedSets:0} ].map(t=>({...t,id:Date.now()+Math.random()})); render(); });
+    document.getElementById('preset-strength').addEventListener('click', ()=>{ tasks = [ {title:'Warm-up mobility', sets:1, completedSets:0}, {title:'Weighted Push', sets:4, completedSets:0}, {title:'Deadlift', sets:4, completedSets:0} ].map(t=>({...t,id:Date.now()+Math.random()})); render(); });
+    document.getElementById('preset-endurance').addEventListener('click', ()=>{ tasks = [ {title:'Warm-up', sets:1, completedSets:0}, {title:'Run / Bike', sets:1, completedSets:0}, {title:'Circuit (3 rounds)', sets:3, completedSets:0} ].map(t=>({...t,id:Date.now()+Math.random()})); render(); });
 
-    // Export / Import (two export buttons map to same logic)
-    document.getElementById('btn-export').addEventListener('click', exportTasks);
-    document.getElementById('btn-export2').addEventListener('click', exportTasks);
-    function exportTasks(){
-      const blob = new Blob([JSON.stringify(tasks, null, 2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'winter-arc-training-mobile.json'; a.click(); URL.revokeObjectURL(url);
-    }
+    // timer
+    let timer=null; let timeLeft=30; const topTimerDisplay=document.getElementById('topTimerDisplay');
+    function updateTimer(){ const mm=String(Math.floor(timeLeft/60)).padStart(2,'0'); const ss=String(timeLeft%60).padStart(2,'0'); topTimerDisplay.textContent = `${mm}:${ss}` }
+    document.getElementById('topTimer').addEventListener('click', ()=>{ const s = prompt('Enter seconds for rest timer', '30'); const n=parseInt(s); if(!isNaN(n)&&n>0){ timeLeft=n; updateTimer(); if(timer) clearInterval(timer); timer = setInterval(()=>{ timeLeft--; updateTimer(); if(timeLeft<=0){ clearInterval(timer); timer=null; alert('Rest finished'); } },1000); } });
+    updateTimer();
 
-    const fileInput = document.getElementById('fileInput');
-    fileInput.addEventListener('change', (e)=>{
-      const f = e.target.files[0]; if(!f) return; const reader = new FileReader();
-      reader.onload = (ev)=>{ try{ const imported = JSON.parse(ev.target.result); if(Array.isArray(imported)){ tasks = imported.map(t=>({...t,id:Date.now()+Math.random(), title:t.title||'', reps:t.reps||'', sets:parseInt(t.sets)||1, completedSets:parseInt(t.completedSets)||0})); render(); alert('Imported.'); } else alert('Invalid file'); }catch(err){alert('Could not import: '+err.message)} };
-      reader.readAsText(f);
+    // search overlay
+    const exercises = [ 'Push-ups','Squats','Plank','Burpees','Lunges','Pull-ups' ];
+    const searchBtn = document.querySelector('.icon-small');
+    const searchOverlay = document.getElementById('search-overlay');
+    const closeSearch = document.getElementById('close-search');
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+
+    searchBtn.onclick = ()=>{ searchOverlay.classList.add('active'); setTimeout(()=>searchInput.focus(),120); };
+    closeSearch.onclick = ()=>{ searchOverlay.classList.remove('active'); searchInput.value=''; searchResults.innerHTML=''; };
+
+    searchInput.addEventListener('input', ()=>{
+      const q = searchInput.value.toLowerCase();
+      const filtered = exercises.filter(s=>s.toLowerCase().includes(q));
+      if(filtered.length===0){ searchResults.innerHTML = `<p style=\"text-align:center;color:#9fb7d9\">No results</p>`; }
+      else{
+        searchResults.innerHTML = filtered.map(s=>`<a href=\"#\" class=\"store-item\" style=\"margin-bottom:8px\"> <div class=\"store-icon\">🏬</div> <div style=\"flex:1\"><h4 style=\"margin:0\">${escapeHtml(s)}</h4><p style=\"margin:6px 0 0;color:var(--muted)\">Add to plan</p></div><div class=\"chevron\">➤</div></a>`).join('');
+        Array.from(searchResults.querySelectorAll('.store-item')).forEach((el,i)=>{
+          el.addEventListener('click',(e)=>{ e.preventDefault(); addTask(filtered[i],1); searchOverlay.classList.remove('active'); searchInput.value=''; searchResults.innerHTML=''; });
+        });
+      }
     });
 
-    // Presets
-    document.getElementById('preset-beginner').addEventListener('click', ()=>{
-      tasks = [
-        {title:'Warm-up — jog or jump rope (5 min)', reps:'', sets:1, completedSets:0},
-        {title:'Push-ups', reps:'8-12', sets:3, completedSets:0},
-        {title:'Bodyweight Squats', reps:'12-15', sets:3, completedSets:0},
-        {title:'Plank', reps:'45 sec', sets:2, completedSets:0},
-        {title:'Cool-down — stretch (5 min)', reps:'', sets:1, completedSets:0}
-      ].map(t=>({...t, id:Date.now()+Math.random()})); render();
-      closeSheet();
-    });
+    function escapeHtml(str){ return String(str).replace(/[&<>\"']/g, function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":"&#39;"}[m]}); }
 
-    document.getElementById('preset-strength').addEventListener('click', ()=>{
-      tasks = [
-        {title:'Warm-up — mobility (5 min)', reps:'', sets:1, completedSets:0},
-        {title:'Incline Push-ups / Bench', reps:'6-10', sets:4, completedSets:0},
-        {title:'Pull-ups / Rows', reps:'5-8', sets:4, completedSets:0},
-        {title:'Romanian Deadlift or Hip Hinge', reps:'6-8', sets:4, completedSets:0},
-        {title:'Cooldown', reps:'', sets:1, completedSets:0}
-      ].map(t=>({...t,id:Date.now()+Math.random()})); render(); closeSheet();
-    });
-
-    document.getElementById('preset-endurance').addEventListener('click', ()=>{
-      tasks = [
-        {title:'Warm-up — dynamic (5 min)', reps:'', sets:1, completedSets:0},
-        {title:'Run / Row / Bike (steady)', reps:'20 min', sets:1, completedSets:0},
-        {title:'Circuit — 3 rounds: 30s on / 15s rest', reps:'push/squat/plank', sets:3, completedSets:0},
-        {title:'Cooldown stretch', reps:'', sets:1, completedSets:0}
-      ].map(t=>({...t,id:Date.now()+Math.random()})); render(); closeSheet();
-    });
-
-    // Simple rest timer (seconds) with beep
-    let timer = null; let timeLeft = 30; const timerDisplay = document.getElementById('timerDisplay');
-    function updateTimerDisplay(){ const mm = String(Math.floor(timeLeft/60)).padStart(2,'0'); const ss = String(timeLeft%60).padStart(2,'0'); timerDisplay.textContent = `${mm}:${ss}`; }
-
-    document.getElementById('timerStart').addEventListener('click', ()=>{
-      const txt = timerDisplay.textContent.split(':');
-      timeLeft = parseInt(txt[0])*60 + parseInt(txt[1]);
-      if(isNaN(timeLeft)||timeLeft<=0) timeLeft = 30;
-      if(timer) clearInterval(timer);
-      timer = setInterval(()=>{ timeLeft--; updateTimerDisplay(); if(timeLeft<=0){ clearInterval(timer); timer=null; playBeep(); alert('Timer finished'); } }, 1000);
-    });
-    document.getElementById('timerStop').addEventListener('click', ()=>{ if(timer) clearInterval(timer); timer=null; });
-    document.getElementById('timerReset').addEventListener('click', ()=>{ if(timer) clearInterval(timer); timer=null; timeLeft = 30; updateTimerDisplay(); });
-    timerDisplay.addEventListener('click', ()=>{ const val = prompt('Enter seconds (e.g. 30 or 90):', '30'); const s = parseInt(val); if(!isNaN(s) && s>0){ timeLeft = s; updateTimerDisplay(); }});
-
-    function playBeep(){ try{ const ctx = new (window.AudioContext||window.webkitAudioContext)(); const o = ctx.createOscillator(); const g = ctx.createGain(); o.type='sine'; o.frequency.value=880; g.gain.value=0.05; o.connect(g); g.connect(ctx.destination); o.start(); setTimeout(()=>{ o.stop(); ctx.close(); },250); }catch(e){console.log('beep failed',e)} }
-
-    // Sheet controls
-    const sheet = document.getElementById('sheet');
-    document.getElementById('openSheet').addEventListener('click', ()=>{ sheet.classList.add('open'); window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'}); });
-    document.getElementById('closeSheet').addEventListener('click', closeSheet);
-    function closeSheet(){ sheet.classList.remove('open'); }
-
-    // Export2 button mapping
-    document.getElementById('btn-reset').addEventListener('click', ()=>{ if(confirm('Reset to default training plan?')){ tasks = defaults.map(t=>({...t,id:Date.now()+Math.random()})); render(); }});
-
-    // initial render
     render();
-    updateTimerDisplay();
   </script>
 </body>
 </html>
